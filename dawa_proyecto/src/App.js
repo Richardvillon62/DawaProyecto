@@ -1,5 +1,6 @@
 
 import './App.css';
+import React from 'react';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
