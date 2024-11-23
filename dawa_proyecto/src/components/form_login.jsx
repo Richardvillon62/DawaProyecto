@@ -49,9 +49,122 @@ export default function SingIn(){
         }
     };
 
-    
+    useEffect(() => {
+        if (credentials) {
+            fetch("http://localhost:3200/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(credentials),
+            })
+            .then((res) => {
+                if (!res.ok) {
+                    return res.json().then((data) => {
+                        throw new Error(data.message || 'Usuario o contraseña incorrectos');
+                    });
+                }
+                return res.json();
+            })
+            .then((data) => {
+                console.log('Response from server:', data); 
+                if (data && data.success) {
+                    if (data.data && data.data.cedula && data.data.nombre && data.data.rol) { 
+                        console.log(data);
+                        const user = {
+                            id_usuario: data.data.usuario_id,
+                            cedula: data.data.cedula,
+                            nombre: data.data.nombre,
+                            rol: data.data.rol,
+                            
+                        };
+                        localStorage.setItem('user', JSON.stringify(user));
+                        setError(null);
+                        navigate('/');
+                    } else {
+                        throw new Error('Datos de usuario incompletos en la respuesta');
+                    }
+                } else if (data) {
+                    setError(data.message);
+                }
+            })
+            .catch((err) => {
+                console.error('Error during login:', err); 
+                setError(err.message || 'Usuario o contraseña incorrecta.');
+            });
+        }
+    }, [credentials, navigate]);
 
+    return (
+        <div className='contenedor'>
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Avatar sx={{ m: 1, bgcolor: 'info.main' }}>
+                    <MobileFriendlyIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    Iniciar Sesión
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="cedula"
+                        label="Cédula"
+                        name="cedula"
+                        autoComplete="cedula"
+                        autoFocus
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Contraseña"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
 
+                    {error && (
+                        <Stack sx={{ width: '100%' }} spacing={2}>
+                            <Alert variant="filled" severity="error">
+                                {error}
+                            </Alert>
+                        </Stack>
+                    )}
 
-
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                    >
+                        Iniciar Sesión
+                    </Button>
+                    <Grid container>
+                        <Grid item xs>
+                            <Link href="#" variant="body2">
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </Grid>
+                        <Grid item>
+                            <Link href="#" variant="body2">
+                                {"¿No tienes una cuenta? Crear una"}
+                            </Link>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+        </div>
+    );
 }
+
