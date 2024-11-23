@@ -12,8 +12,6 @@ import '../styles/form_login.css';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-
-
 function Copyright (props){
     return(
         <Typopraphy variant="body2" color="text.secundary" algin="center"{...props} >
