@@ -2,6 +2,11 @@ import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Inicio from './pages/inicio.js';
+import Login from './pages/login.js';
+import Contactanos from './pages/contactanos.js';
+import Nosotros from './pages/nosotros.js';
+
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
