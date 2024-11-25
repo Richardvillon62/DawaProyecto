@@ -10,7 +10,10 @@ function App() {
     <Router>
       <Router>
         <Route path='/' element={<Inicio />} />
-      
+        |<Route path='/login' element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+        <Route path='/contactanos' element={< Contactanos/>} />
+        <Route path='/nosotros' element={< Nosotros/>} />
+  
       </Router>
     </Router>
 
