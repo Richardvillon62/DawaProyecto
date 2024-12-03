@@ -7,7 +7,7 @@
     background: rgba(255, 255, 255, 0.826);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    border: 3px solid rgba(255, 255, 255, 0.31);
+    border: 3px solid rgba(12, 6, 6, 0.31);
 }
 
 @media (max-width: 992px) {
