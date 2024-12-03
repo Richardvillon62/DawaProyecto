@@ -85,7 +85,7 @@ export default function Component() {
                     </div>
                 </div>
                 <div className="copy-column">
-                        <p className="copy">&copy; 2024 Juan Repara . All rights reserved.</p>
+                        <p className="copy">&copy; 2024 Juan Repara. All rights reserved.</p>
                 </div>
             </Container>
         </footer>

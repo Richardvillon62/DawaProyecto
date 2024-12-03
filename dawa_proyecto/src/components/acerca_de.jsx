@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Box, Grid, Container, Paper } from '@mui/material';
 import '../styles/AboutUs.css';
+import imagen4 from '../assets/img/imagen4.jpg';
 
 const AcercaDe = () => {
   return (
@@ -106,7 +107,7 @@ const AcercaDe = () => {
                   </Typography>
                 </li>
               </ul>
-              <img src="https://www.compraensanjuan.com/fotos_articulos/310228_1.jpg" alt="Servicios" className="about-us-image" />
+              <img src={imagen4} alt="Servicios" className="about-us-image" />
             </Box>
           </Paper>
         </Grid>

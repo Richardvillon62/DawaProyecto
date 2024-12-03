@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,45 +12,46 @@ import '../styles/form_login.css';
 import Stack from '@mui/material/Stack';
 import Alert from '@mui/material/Alert';
 
-function Copyright (props){
-    return(
-        <Typopraphy variant="body2" color="text.secundary" algin="center"{...props} >
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
             <Link color="inherit" href="/">
                 Juan Repara
             </Link>{' '}
-            {new Date().getUTCFullYear}
+            {new Date().getFullYear()}
             {'.'}
-        </Typopraphy>
+        </Typography>
     );
 }
 
-export default function SingIn(){
-    const [error,setError] = useState(null); 
-    const [credentials,setCredentials] = useState(null);
+export default function SignIn() {
+    const [error, setError] = useState(null);
+    const [credentials, setCredentials] = useState(null);
     const navigate = useNavigate();
 
-    const handleSubmit = (event)=>{
+    const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormaData(event.correntTarget);
+        const data = new FormData(event.currentTarget);
         const cedula = data.get('cedula');
-        const password = data.get('pasword');
+        const password = data.get('password');
 
-        if (cedula.lenght !== 10 ){
-            setError('La cedula debe contener 10 números');
+        if (cedula.length !== 10) {
+            setError('La cédula debe contener 10 números');
             return;
         }
 
-        if(!/^\d+$/.test(cedula)){
+        if (!/^\d+$/.test(cedula)) {
             setError('La cédula debe contener solo números');
             return;
         }
 
-        if(!cedula || !password){
-            setError('Ingresar Usuario o contraseña válida');
+        if (!cedula || !password) {
+            setError('Ingrese Usuario o contraseña válida');
         } else {
-            const credentials ={
+            const credentials = {
                 cedula: cedula,
-                password: password, 
+                password: password,
             };
             setCredentials(credentials);
             setError("");
@@ -175,4 +176,3 @@ export default function SingIn(){
         </div>
     );
 }
-

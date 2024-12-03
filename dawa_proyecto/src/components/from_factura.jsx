@@ -28,10 +28,11 @@ function priceRow(qty, unit) {
   return qty * unit;
 }
 
-function createRow(desc, qty, unit) {
+function createRow(desc, qty, unit, repuesto_id) {
   const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
+  return { desc, qty, unit, price, repuesto_id };
 }
+
 
 function subtotal(items) {
   return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
@@ -42,6 +43,11 @@ const initialRows = [
   createRow('Pantalla', 1, 75.00),
   createRow('Cámara', 3, 25.00),
 ];
+
+const addNewItem = () => {
+  setRows([...rows, createRow('', 0, 0, null)]);  // Inicializa el repuesto_id como null
+};
+
 
 export default function Invoice() {    
   const [rows, setRows] = useState(initialRows);
@@ -86,9 +92,7 @@ export default function Invoice() {
     setSelectedClient(client);
   };
 
-  const addNewItem = () => {
-    setRows([...rows, createRow('', 0, 0)]);
-  };
+  
 
   const saveInvoice = () => {
     fetch('http://localhost:3200/api/factura/guardar', {
@@ -103,12 +107,13 @@ export default function Invoice() {
         subtotal: subtotal(rows),
         iva: TAX_RATE * subtotal(rows),
         monto_total: subtotal(rows) + (TAX_RATE * subtotal(rows)),
-        items: rows.map(({ desc, qty, unit, price }) => ({
+        items: rows.map(({ desc, qty, unit, price, repuesto_id }) => ({
           descripcion: desc,
           cantidad: qty,
+          repuesto_id: repuesto_id,  // Añadir el repuesto_id
           valor_unitario: unit,
           valor_total: price,
-        })),
+        }))        
       }),
     })
       .then(response => {

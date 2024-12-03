@@ -17,31 +17,35 @@ export const ObtenerCliente = async (req, res) => {
 };
 export const insertFactura = async (req, res) => {
     try {
-        const { cliente_id, reparacion_id, fecha_emision, subtotal, iva, monto_total, items } = req.body;
-        if (!cliente_id || !reparacion_id || !fecha_emision || !subtotal || !iva || !monto_total || !items) {
-            return res.status(400).json({
-                error: 'Todos los campos son requeridos.'
-            });
-        }
-        const [insertFacturaResult] = await db_pool_connection.query(
-            'INSERT INTO factura (cliente_id, reparacion, fecha_emision, subtotal, iva, monto_total) VALUES (?, ?, ?, ?, ?, ?)',
-            [cliente_id, reparacion_id, fecha_emision, subtotal, iva, monto_total]
+      const { cliente_id, reparacion_id, fecha_emision, subtotal, iva, monto_total, items } = req.body;
+  
+      
+      if (!cliente_id || !reparacion_id || !fecha_emision || !subtotal || !iva || !monto_total || !items) {
+        return res.status(400).json({ error: 'Todos los campos son requeridos.' });
+      }
+  
+      
+      const [insertFacturaResult] = await db_pool_connection.query(
+        'INSERT INTO factura (cliente_id, reparacion, fecha_emision, subtotal, iva, monto_total) VALUES (?, ?, ?, ?, ?, ?)',
+        [cliente_id, reparacion_id, fecha_emision, subtotal, iva, monto_total]
+      );
+      const facturaId = insertFacturaResult.insertId;
+  
+      
+      for (const item of items) {
+        await db_pool_connection.query(
+          'INSERT INTO item_factura (factura_id, repuesto_id, cantidad, valor_unitario, valor_total) VALUES (?, ?, ?, ?, ?)',
+          [facturaId, item.repuesto_id || null, item.cantidad, item.valor_unitario, item.valor_total]
         );
-        const facturaId = insertFacturaResult.insertId;
-        for (const item of items) {
-            await db_pool_connection.query(
-                'INSERT INTO item_factura (factura_id, repuesto_id, cantidad, valor_unitario, valor_total) VALUES (?, ?, ?, ?, ?)',
-                [facturaId, item.repuesto_id, item.cantidad, item.valor_unitario, item.valor_total]
-            );
-        }
-        return res.status(201).json({
-            message: 'Factura ingresada exitosamente.',
-            factura_id: facturaId
-        });
+      }
+  
+      return res.status(201).json({
+        message: 'Factura ingresada exitosamente.',
+        factura_id: facturaId,
+      });
     } catch (error) {
-        console.error('Error al insertar factura:', error);
-        return res.status(500).json({
-            error: 'Error interno al insertar factura.'
-        });
+      console.error('Error al insertar factura:', error);
+      return res.status(500).json({ error: 'Error interno al insertar factura.' });
     }
-};
+  };
+  
